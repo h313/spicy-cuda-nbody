@@ -74,7 +74,7 @@ struct Parameters {
 };
 
 bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
-                  Points *pts, Parameters params) {
+                  Particles *pts, Parameters params) {
   const Octree_node &node = nodes[idx];
   int num_points = node.num_points();
 
@@ -102,21 +102,21 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
     if (num_points_in_children != node.num_points())
       return false;
 
-    return check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 0,
+    return check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 0,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 1,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 1,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 2,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 2,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 3,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 3,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 4,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 4,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 5,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 5,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 6,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 6,
                           num_pts, pts, Parameters(params, true)) &&
-           check_quadtree(&nodes[params.num_nodes_at_this_level], 8 * idx + 7,
+           check_octree(&nodes[params.num_nodes_at_this_level], 8 * idx + 7,
                           num_pts, pts, Parameters(params, true));
   }
 
@@ -126,7 +126,7 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
     if (it >= num_pts)
       return false;
 
-    float3 p = pts->get_point(it);
+    float3 p = pts->get_location(it);
 
     if (!bbox.contains(p))
       return false;

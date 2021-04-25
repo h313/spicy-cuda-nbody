@@ -5,12 +5,13 @@ class Particles {
 private:
   float *s_x, *s_y, *s_z;
   float *v_x, *v_y, *v_z;
+  size_t count;
 
 public:
   __host__ __device__ Particles() = default;
 
-  __host__ __device__ Particles(float *x, float *y, float *z)
-      : s_x(x), s_y(y), s_z(z) {}
+  __host__ __device__ Particles(float *x, float *y, float *z, size_t ct)
+      : s_x(x), s_y(y), s_z(z), count(ct) {}
 
   __host__ __device__ __forceinline__ float3 get_location(int idx) const {
     return make_float3(s_x[idx], s_y[idx], s_z[idx]);
@@ -39,12 +40,21 @@ public:
     s_y = y;
     s_z = z;
   }
+
+  __host__ __device__ __forceinline__ void set_count(size_t ct) {
+    count = ct;
+  }
+
+  __host__ __device__ __forceinline__ size_t get_count(size_t ct) {
+    return count;
+  }
 };
 
 class Bounding_box {
 private:
   float3 m_p_min;
   float3 m_p_max;
+
 public:
   __host__ __device__ Bounding_box() {
     m_p_min = make_float3(0.0f, 0.0f, 0.0f);
