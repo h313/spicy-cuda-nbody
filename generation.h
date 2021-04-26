@@ -3,7 +3,7 @@
 #include <memory>
 #include "octree.h"
 
-__host__ std::unique_ptr<Particles> generate_random(size_t num_particles, float size) {
+__host__ Particles* generate_random(size_t num_particles, float size) {
   std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
   std::uniform_real_distribution<float> distrib(-1.0 * size, size);
 
@@ -17,6 +17,6 @@ __host__ std::unique_ptr<Particles> generate_random(size_t num_particles, float 
     s_z[i] = distrib(rng);
   }
 
-  std::unique_ptr<Particles> particles(new Particles(s_x, s_y, s_z, num_particles));
+  Particles* particles = new Particles(s_x, s_y, s_z, num_particles);
   return particles;
 }

@@ -13,6 +13,8 @@ public:
   __host__ __device__ Particles(float *x, float *y, float *z, size_t ct)
       : s_x(x), s_y(y), s_z(z), count(ct) {}
 
+  Particles& operator=(const Particles& p) = default;
+
   __host__ __device__ __forceinline__ float3 get_location(int idx) const {
     return make_float3(s_x[idx], s_y[idx], s_z[idx]);
   }
