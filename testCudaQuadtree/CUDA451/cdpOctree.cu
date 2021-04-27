@@ -268,7 +268,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
 
       for (it += threadIdx.x; it < end; it += NUM_THREADS_PER_BLOCK)
         if (it < end)
-          points[0].set_location(it, points[1].get_location(it));
+          points[0].set_point(it, points[1].get_point(it));
     }
 
     return;
@@ -314,7 +314,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     bool is_active = range_it < range_end;
 
     // Load the coordinates of the point.
-    float3 p = is_active ? in_points.get_location(range_it)
+    float3 p = is_active ? in_points.get_point(range_it)
                          : make_float3(0.0f, 0.0f, 0.0f);
 
     int num_pts = 0;
@@ -441,7 +441,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     bool is_active = range_it < range_end;
 
     // Load the coordinates of the point.
-    float3 p = is_active ? in_points.get_location(range_it)
+    float3 p = is_active ? in_points.get_point(range_it)
                          : make_float3(0.0f, 0.0f, 0.0f);
 
     // Count top-left points in front.
@@ -451,7 +451,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     int dest = s_num_pts[0][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[0][warp_id] += __popc(vote);
@@ -462,7 +462,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[1][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[1][warp_id] += __popc(vote);
@@ -473,7 +473,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[2][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[2][warp_id] += __popc(vote);
@@ -484,7 +484,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[3][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[3][warp_id] += __popc(vote);
@@ -496,7 +496,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[4][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[4][warp_id] += __popc(vote);
@@ -507,7 +507,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[5][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[5][warp_id] += __popc(vote);
@@ -518,7 +518,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[6][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[6][warp_id] += __popc(vote);
@@ -529,7 +529,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Points *points,
     dest = s_num_pts[7][warp_id] + __popc(vote & lane_mask_lt);
 
     if (pred)
-      out_points.set_location(dest, p);
+      out_points.set_point(dest, p);
 
     if (lane_id == 0)
       s_num_pts[7][warp_id] += __popc(vote);
@@ -671,7 +671,7 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
     if (it >= num_pts)
       return false;
 
-    float3 p = pts->get_location(it);
+    float3 p = pts->get_point(it);
 
     if (!bbox.contains(p))
       return false;
