@@ -1,54 +1,105 @@
-#include <thrust/device_vector.h>
 #include <thrust/random.h>
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+#include <vector>
+#include "helper_cuda.h"
+
+class Particle {
+private:
+  float3 position;
+  float3 velocity;
+
+public:
+  __host__ __device__ __forceinline__ void set_position(float3 pos) {
+    position = pos;
+  }
+
+  __host__ __device__ __forceinline__ float3 get_position() {
+    return position;
+  }
+
+  __host__ __device__ __forceinline__ void set_velocity(float3 vel) {
+    velocity = vel;
+  }
+
+  __host__ __device__ __forceinline__ float3 get_velocity() {
+    return velocity;
+  }
+};
 
 class Particles {
 private:
-  float *s_x, *s_y, *s_z;
-  float *v_x, *v_y, *v_z;
-  size_t count;
+  thrust::host_vector<Particle> host_particle_list;
+  thrust::device_vector<Particle> device_particle_list;
+
+#if defined(__CUDA_ARCH__)
+  thrust::device_vector<Particle>& get_vector() { return device_particle_list; }
+#else
+  thrust::host_vector<Particle>& get_vector() { return host_particle_list; }
+#endif
 
 public:
   __host__ __device__ Particles() = default;
 
-  __host__ __device__ Particles(float *x, float *y, float *z, size_t ct)
-      : s_x(x), s_y(y), s_z(z), count(ct) {}
-
-  Particles& operator=(const Particles& p) = default;
-
-  __host__ __device__ __forceinline__ float3 get_location(int idx) const {
-    return make_float3(s_x[idx], s_y[idx], s_z[idx]);
+  __host__ __device__ Particles(float *s_x, float *s_y, float *s_z, size_t ct) {
+    for (size_t i = 0; i < ct; i++) {
+      Particle p;
+      p.set_position(make_float3(s_x[i], s_y[i], s_z[i]));
+      get_vector().push_back(p);
+    }
   }
 
-  __host__ __device__ __forceinline__ void set_location(int idx,
-                                                        const float3 &p) {
-    s_x[idx] = p.x;
-    s_y[idx] = p.y;
-    s_y[idx] = p.z;
+  __host__ __device__ Particles(float *s_x, float *s_y, float *s_z, float *v_x,
+                     float *v_y, float *v_z, size_t ct) {
+    for (size_t i = 0; i < ct; i++) {
+      Particle p;
+      p.set_position(make_float3(s_x[i], s_y[i], s_z[i]));
+      p.set_velocity(make_float3(v_x[i], v_y[i], v_z[i]));
+      get_vector().push_back(p);
+    }
   }
 
-  __host__ __device__ __forceinline__ float3 get_velocity(int idx) const {
-    return make_float3(v_x[idx], v_y[idx], v_z[idx]);
+  Particles &operator=(const Particles &p) = default;
+
+  __host__ __device__ __forceinline__ void add_particle(float s_x, float s_y, float s_z) {
+    Particle p;
+    p.set_position(make_float3(s_x, s_y, s_z));
+    get_vector().push_back(p);
   }
 
-  __host__ __device__ __forceinline__ void set_velocity(int idx,
-                                                        const float3 &p) {
-    v_x[idx] = p.x;
-    v_y[idx] = p.y;
-    v_y[idx] = p.z;
+  __host__ __device__ __forceinline__ void add_particle(float s_x, float s_y, float s_z,
+                                                        float v_x, float v_y, float v_z) {
+    Particle p;
+    p.set_position(make_float3(s_x, s_y, s_z));
+    p.set_velocity(make_float3(v_x, v_y, v_z));
+    get_vector().push_back(p);
   }
 
-  __host__ __device__ __forceinline__ void set(float *x, float *y, float *z) {
-    s_x = x;
-    s_y = y;
-    s_z = z;
+  __host__  __device__ __forceinline__ Particle &get(size_t index) {
+    Particle& p = &get_vector()[index];
+    return p;
   }
 
-  __host__ __device__ __forceinline__ void set_count(size_t ct) {
-    count = ct;
+  __host__  __device__ __forceinline__ size_t get_count() {
+    return get_vector().size();
   }
 
-  __host__ __device__ __forceinline__ size_t get_count(size_t ct) {
-    return count;
+  __host__  __device__ __forceinline__ float3 get_location(size_t index) {
+    Particle& p = get_vector()[index];
+    return p.get_position();
+  }
+
+  __host__  __device__ __forceinline__ void set_location(size_t index, float3 value) {
+    Particle& p = get_vector()[index];
+    return p.set_position(value);
+  }
+
+  void syncToHost() {
+    host_particle_list = device_particle_list;
+  }
+
+  void syncToDevice() {
+    device_particle_list = host_particle_list;
   }
 };
 

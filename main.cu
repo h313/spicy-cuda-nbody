@@ -1,6 +1,5 @@
 #include "generation.h"
 #include "gravity_calculations.h"
-#include "helper_cuda.h"
 #include <iostream>
 
 int main(int argc, char **argv) {

@@ -9,14 +9,20 @@ __host__ Particles* generate_random(size_t num_particles, float size) {
 
   float *s_x = (float*) malloc(sizeof(float) * num_particles);
   float *s_y = (float*) malloc(sizeof(float) * num_particles);
-  float *s_z = (float*) malloc(sizeof(float) * num_particles);
+  float *s_z = (float*) malloc(sizeof(float) * num_particles);\
+  float *v_x = (float*) malloc(sizeof(float) * num_particles);
+  float *v_y = (float*) malloc(sizeof(float) * num_particles);
+  float *v_z = (float*) malloc(sizeof(float) * num_particles);
 
   for (int i = 0; i < num_particles; i++) {
     s_x[i] = distrib(rng);
     s_y[i] = distrib(rng);
     s_z[i] = distrib(rng);
+    v_x[i] = distrib(rng);
+    v_y[i] = distrib(rng);
+    v_z[i] = distrib(rng);
   }
 
-  Particles* particles = new Particles(s_x, s_y, s_z, num_particles);
+  Particles* particles = new Particles(s_x, s_y, s_z, v_x, v_y, v_z, num_particles);
   return particles;
 }
