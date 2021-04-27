@@ -734,8 +734,8 @@ int main(int argc, char **argv)
     // Generate random points.
     Random_generator rnd;
     thrust::generate(
-        thrust::make_zip_iterator(thrust::make_float3(x_d0.begin(), y_d0.begin(), z_d0.begin())),
-        thrust::make_zip_iterator(thrust::make_float3(x_d0.end(), y_d0.end(), z_d0.begin())),
+        thrust::make_zip_iterator(thrust::make_tuple(x_d0.begin(), y_d0.begin(), z_d0.begin())),
+        thrust::make_zip_iterator(thrust::make_tuple(x_d0.end(), y_d0.end(), z_d0.begin())),
         rnd);
 
     // Host structures to analyze the device ones.
