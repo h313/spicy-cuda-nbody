@@ -778,7 +778,7 @@ int main(int argc, char **argv)
     thrust::host_vector<float> y_h(y_d0);
     thrust::host_vector<float> z_h(y_d0);
     Points host_points;
-    host_points.set(thrust::raw_pointer_cast(&x_h[0]), thrust::raw_pointer_cast(&y_h[0]), hrust::raw_pointer_cast(&z_h[0]));
+    host_points.set(thrust::raw_pointer_cast(&x_h[0]), thrust::raw_pointer_cast(&y_h[0]), thrust::raw_pointer_cast(&z_h[0]));
 
     // Copy nodes to CPU.
     Octree_node *host_nodes = new Octree_node[max_nodes];
