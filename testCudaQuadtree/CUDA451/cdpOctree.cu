@@ -44,7 +44,7 @@ class Points
         }
 
         // Set the pointers.
-        __host__ __device__ __forceinline__ void set(float *x, float *y)
+        __host__ __device__ __forceinline__ void set(float *x, float *y, float *z)
         {
             m_x = x;
             m_y = y;
@@ -686,12 +686,12 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
 struct Random_generator
 {
 
-    __host__ __device__ __forceinline__ thrust::float3 operator()()
+    __host__ __device__ __forceinline__ thrust::tuple<float, float, float> operator()()
     {
         unsigned seed = (blockIdx.x*blockDim.x + threadIdx.x);
         thrust::default_random_engine rng(seed);
         thrust::random::uniform_real_distribution<float> distrib;
-        return thrust::make_float3(distrib(rng), distrib(rng), distrib(rng));
+        return thrust::make_tuple(distrib(rng), distrib(rng), distrib(rng));
     }
 };
 
