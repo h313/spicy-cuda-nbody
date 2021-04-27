@@ -227,7 +227,7 @@ struct Parameters {
 // will apply the same algorithm.
 ////////////////////////////////////////////////////////////////////////////////
 template <int NUM_THREADS_PER_BLOCK>
-__global__ void build_octree_kernel(Octree_node *nodes, Particles *points,
+__global__ void build_octree_kernel(Octree_node *nodes, Points *points,
                                     Parameters params) {
   // The number of warps in a block.
   const int NUM_WARPS_PER_BLOCK = NUM_THREADS_PER_BLOCK / warpSize;
@@ -305,7 +305,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Particles *points,
   }
 
   // Input points.
-  const Particles &in_points = points[params.point_selector];
+  const Points &in_points = points[params.point_selector];
 
   // Compute the number of points.
   for (int range_it = range_begin + lane_id; __any(range_it < range_end);
@@ -432,7 +432,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Particles *points,
   //
 
   // Output points.
-  Particles &out_points = points[(params.point_selector + 1) % 2];
+  Points &out_points = points[(params.point_selector + 1) % 2];
 
   // Reorder points.
   for (int range_it = range_begin + lane_id; __any(range_it < range_end);
@@ -619,7 +619,7 @@ __global__ void build_octree_kernel(Octree_node *nodes, Particles *points,
 // Make sure a Octree is properly defined.
 ////////////////////////////////////////////////////////////////////////////////
 bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
-                  Particles *pts, Parameters params) {
+                  Points *pts, Parameters params) {
   const Octree_node &node = nodes[idx];
   int num_points = node.num_points();
 
@@ -686,9 +686,9 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
 struct Random_generator
 {
 
-    __host__ __device__ __forceinline__ thrust::flaot3 operator()()
+    __host__ __device__ __forceinline__ thrust::float3 operator()()
     {
-        unsigned seed = hash(blockIdx.x*blockDim.x + threadIdx.x);
+        unsigned seed = (blockIdx.x*blockDim.x + threadIdx.x);
         thrust::default_random_engine rng(seed);
         thrust::random::uniform_real_distribution<float> distrib;
         return thrust::make_float3(distrib(rng), distrib(rng), distrib(rng));
@@ -740,8 +740,8 @@ int main(int argc, char **argv)
 
     // Host structures to analyze the device ones.
     Points points_init[2];
-    points_init[0].set(thrust::raw_pointer_cast(&x_d0[0]), thrust::raw_pointer_cast(&y_d0[0], thrust::raw_pointer_cast(&z_d0[0]));
-    points_init[1].set(thrust::raw_pointer_cast(&x_d1[0]), thrust::raw_pointer_cast(&y_d1[0], thrust::raw_pointer_cast(&z_d1[0]));
+    points_init[0].set(thrust::raw_pointer_cast(&x_d0[0]), thrust::raw_pointer_cast(&y_d0[0]), thrust::raw_pointer_cast(&z_d0[0]));
+    points_init[1].set(thrust::raw_pointer_cast(&x_d1[0]), thrust::raw_pointer_cast(&y_d1[0]), thrust::raw_pointer_cast(&z_d1[0]));
 
     // Allocate memory to store points.
     Points *points;
@@ -778,11 +778,11 @@ int main(int argc, char **argv)
     thrust::host_vector<float> y_h(y_d0);
     thrust::host_vector<float> z_h(y_d0);
     Points host_points;
-    host_points.set(thrust::raw_pointer_cast(&x_h[0]), thrust::raw_pointer_cast(&y_h[0], hrust::raw_pointer_cast(&z_h[0]));
+    host_points.set(thrust::raw_pointer_cast(&x_h[0]), thrust::raw_pointer_cast(&y_h[0]), hrust::raw_pointer_cast(&z_h[0]));
 
     // Copy nodes to CPU.
     Octree_node *host_nodes = new Octree_node[max_nodes];
-    checkCudaErrors(cudaMemcpy(host_nodes, nodes, max_nodes *sizeof(Octtree_node), cudaMemcpyDeviceToHost));
+    checkCudaErrors(cudaMemcpy(host_nodes, nodes, max_nodes *sizeof(Octree_node), cudaMemcpyDeviceToHost));
 
     // Validate the results.
     bool ok = check_octree(host_nodes, 0, num_points, &host_points, params);
