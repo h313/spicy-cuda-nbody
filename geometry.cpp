@@ -66,6 +66,12 @@ vec<float, 3> Particles::get_location(size_t index) {
   return p.get_position();
 }
 
+BoundingBox::BoundingBox(float x_min, float y_min, float z_min, float x_max,
+                         float y_max, float z_max) {
+  min = vec<double, 3>{{x_min, y_min, z_min}};
+  max = vec<double, 3>{{x_max, y_max, z_max}};
+}
+
 vec<float, 3> BoundingBox::get_min() { return min; }
 
 vec<float, 3> BoundingBox::get_max() { return max; }
