@@ -23,6 +23,9 @@ public:
 
   OctreeNode* get_child(size_t n);
 
+  void set_parent(OctreeNode* parent);
+  OctreeNode* get_parent();
+
   void build_children();
 };
 

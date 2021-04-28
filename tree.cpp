@@ -21,5 +21,5 @@ void OctreeNode::build_children() {
 
 // Recursive function to generate oct tree called using
 void make_tree(OctreeNode &root, BoundingBox &box, Particles &particles) {
-  // 
+  root.build_children();
 }
