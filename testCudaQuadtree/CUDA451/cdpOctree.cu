@@ -623,8 +623,10 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
   const Octree_node &node = nodes[idx];
   int num_points = node.num_points();
 
-  if (params.depth == params.max_depth ||
-      num_points <= params.min_points_per_node) {
+  cout << "Octree node " << idx << " in layer " << params.num_nodes_at_this_level << " has " << num_points << " points" << endl;
+
+  if (params.depth != params.max_depth ||
+      num_points > params.min_points_per_node) {
     int num_points_in_children = 0;
 
     num_points_in_children +=
@@ -643,6 +645,8 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
         nodes[params.num_nodes_at_this_level + 8 * idx + 6].num_points();
     num_points_in_children +=
         nodes[params.num_nodes_at_this_level + 8 * idx + 7].num_points();
+
+    cout << "Octree node " << idx << " has " << num_points_in_children << " points in children" << endl;
 
     if (num_points_in_children != node.num_points())
       return false;
@@ -668,13 +672,17 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
   const Bounding_box &bbox = node.bounding_box();
 
   for (int it = node.points_begin(); it < node.points_end(); ++it) {
-    if (it >= num_pts)
+    if (it >= num_pts) {
+      cout << "More points than expected!" << endl;
       return false;
+    }
 
     float3 p = pts->get_point(it);
 
-    if (!bbox.contains(p))
+    if (!bbox.contains(p)){
+      cout << "Point not in bounding box!" << endl;
       return false;
+    }
   }
 
   return true;
