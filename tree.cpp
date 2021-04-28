@@ -3,6 +3,7 @@
 #include "pthread.h"
 #include <boost/qvm/vec_access.hpp>
 #include <iostream>
+#include <omp.h>
 
 using namespace boost::qvm;
 
@@ -102,18 +103,15 @@ void OctreeNode::build_children() {
 // Recursive function to generate oct tree called using
 void *make_tree(void *node) {
   pthread_t child_threads[8];
-  bool pthread_active[8] = { false };
+  bool pthread_active[8] = {false};
   // Create the children of the root vector
   OctreeNode *root = static_cast<OctreeNode *>(node);
   if (root->get_particle_count() > 1) {
     root->build_children();
 
-    std::cout << "Finished building children!" << std::endl;
-
     // Now build chidren for each of that root's children as well
     for (size_t i = 0; i < 8; i++) {
       OctreeNode *child = root->get_child(i);
-      std::cout << "Spawning threads!" << std::endl;
       // Only spawn a new thread if we have more than one particle in the area
       if (child->get_particle_count() > 1) {
         pthread_create(&child_threads[i], NULL, make_tree, (void *)child);
@@ -125,6 +123,24 @@ void *make_tree(void *node) {
     for (int i = 0; i < 8; i++) {
       if (pthread_active[i])
         pthread_join(child_threads[i], NULL);
+    }
+  }
+}
+
+// Recursive function to generate oct tree called using
+void make_tree_openmp(OctreeNode *root) {
+  // Create the children of the root vector
+  omp_set_num_threads(8);
+  if (root->get_particle_count() > 1) {
+    root->build_children();
+
+    // Now build chidren for each of that root's children as well
+    #pragma omp parallel for
+    for (size_t i = 0; i < 8; i++) {
+      OctreeNode *child = root->get_child(i);
+      // Only spawn a new thread if we have more than one particle in the area
+      if (child->get_particle_count() > 1)
+        make_tree_openmp(child);
     }
   }
 }

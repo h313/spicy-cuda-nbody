@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 find_package(Boost REQUIRED)
 find_package(Threads REQUIRED)
-find_package(TBB COMPONENTS tbbmalloc tbbmalloc_proxy)
+find_package(TBB REQUIRED COMPONENTS tbbmalloc tbbmalloc_proxy)
+find_package(OpenMP)
 
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
@@ -16,7 +17,7 @@ add_library(geometry geometry.cpp)
 target_link_libraries(geometry Boost::boost)
 
 add_library(tree tree.cpp)
-target_link_libraries(tree Threads::Threads geometry tbb)
+target_link_libraries(tree Threads::Threads geometry tbb OpenMP::OpenMP_CXX)
 
 add_library(generator generator.cpp)
 target_link_libraries(generator tree ${CSUPPORT} ${CSPICE})

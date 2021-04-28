@@ -19,5 +19,7 @@ int main(int argc, char **argv) {
   output.add_datapoints(particles);
   output.add_octree_bounding_boxes(parent);
 
+  //make_tree(static_cast<void *>(parent));
+  make_tree_openmp(parent);
   return 0;
 }
