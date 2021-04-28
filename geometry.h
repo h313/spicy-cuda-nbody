@@ -34,7 +34,8 @@ public:
 
   void add_particle(boost::qvm::vec<float, 3> loc);
 
-  void add_particle(boost::qvm::vec<float, 3> loc, boost::qvm::vec<float, 3> vel);
+  void add_particle(boost::qvm::vec<float, 3> loc,
+                    boost::qvm::vec<float, 3> vel);
 
   Particle &get(size_t index);
 
@@ -50,7 +51,8 @@ private:
 
 public:
   BoundingBox(boost::qvm::vec<float, 3> min, boost::qvm::vec<float, 3> max);
-  BoundingBox(float x_min, float y_min, float z_min, float x_max, float y_max, float z_max);
+  BoundingBox(float x_min, float y_min, float z_min, float x_max, float y_max,
+              float z_max);
   bool contains(boost::qvm::vec<float, 3> item);
 
   boost::qvm::vec<float, 3> get_min();
