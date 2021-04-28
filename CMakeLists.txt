@@ -8,9 +8,9 @@ find_package(TBB COMPONENTS tbbmalloc tbbmalloc_proxy)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 
-include_directories('cspice/include')
-find_library(cspice cspice 'cspice/lib')
-find_library(csupport csupport 'cspice/lib')
+include_directories("cspice/include")
+find_library(CSPICE NAMES cspice.a PATHS "cspice/lib")
+find_library(CSUPPORT NAMES csupport.a PATHS "cspice/lib")
 
 add_library(geometry geometry.cpp)
 target_link_libraries(geometry Boost::boost)
@@ -18,5 +18,8 @@ target_link_libraries(geometry Boost::boost)
 add_library(tree tree.cpp)
 target_link_libraries(tree Threads::Threads geometry tbb)
 
+add_library(generator generator.cpp)
+target_link_libraries(generator tree ${CSUPPORT} ${CSPICE})
+
 add_executable(nbody main.cpp)
-target_link_libraries(nbody tree geometry)
+target_link_libraries(nbody tree geometry generator)
