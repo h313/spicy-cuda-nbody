@@ -13,8 +13,6 @@
 #include <thrust/device_vector.h>
 #include "helper_cuda.h"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 // A structure of 3D points (structure of arrays).
 ////////////////////////////////////////////////////////////////////////////////
@@ -625,7 +623,7 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
   const Octree_node &node = nodes[idx];
   int num_points = node.num_points();
 
-  cout << "Octree node " << idx << " in layer " << params.num_nodes_at_this_level << " has " << num_points << " points" << endl;
+  std::cout << "Octree node " << idx << " in layer " << params.num_nodes_at_this_level << " has " << num_points << " points" << std::endl;
 
   if (params.depth != params.max_depth ||
       num_points > params.min_points_per_node) {
@@ -648,7 +646,7 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
     num_points_in_children +=
         nodes[params.num_nodes_at_this_level + 8 * idx + 7].num_points();
 
-    cout << "Octree node " << idx << " has " << num_points_in_children << " points in children" << endl;
+    std::cout << "Octree node " << idx << " has " << num_points_in_children << " points in children" << std::endl;
 
     if (num_points_in_children != node.num_points())
       return false;
@@ -675,14 +673,14 @@ bool check_octree(const Octree_node *nodes, size_t idx, size_t num_pts,
 
   for (int it = node.points_begin(); it < node.points_end(); ++it) {
     if (it >= num_pts) {
-      cout << "More points than expected!" << endl;
+      std::cout << "More points than expected!" << std::endl;
       return false;
     }
 
     float3 p = pts->get_point(it);
 
     if (!bbox.contains(p)){
-      cout << "Point not in bounding box!" << endl;
+      std::cout << "Point not in bounding box!" << std::endl;
       return false;
     }
   }
