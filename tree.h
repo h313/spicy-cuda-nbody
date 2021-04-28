@@ -36,3 +36,5 @@ public:
 
 // Recursive function to generate oct tree
 void *make_tree(void *node);
+
+void make_tree_openmp(OctreeNode *root);

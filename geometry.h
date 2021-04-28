@@ -61,7 +61,5 @@ public:
   boost::qvm::vec<float, 3> get_min();
   boost::qvm::vec<float, 3> get_max();
 
-  void compute_center();
   boost::qvm::vec<float, 3> get_center();
-
 };

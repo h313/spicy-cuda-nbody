@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
       new OctreeNode(generate_random_particles(100, 0, 100), bb);
 
   std::cout << "Completed particle generation!" << std::endl;
-
-  make_tree(static_cast<void *>(parent));
+  //make_tree(static_cast<void *>(parent));
+  make_tree_openmp(parent);
   return 0;
 }
