@@ -1,10 +1,14 @@
 #include "data.h"
 
+#include <boost/qvm/vec_access.hpp>
+
+using namespace boost::qvm;
+
 DataOutput::DataOutput(char* filename) {
     output_stream.open(filename);
 }
 
-~DataOutput::DataOutput() {
+DataOutput::~DataOutput() {
     output_stream.close();
 }
 
