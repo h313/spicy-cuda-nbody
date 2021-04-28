@@ -26,8 +26,8 @@ target_link_libraries(tree Threads::Threads geometry tbb OpenMP::OpenMP_CXX)
 add_library(generator generator.cpp)
 target_link_libraries(generator tree ${CSUPPORT} ${CSPICE})
 
-#add_library(data data.cpp)
-#target_link_libraries(data generator Boost)
+add_library(data data.cpp)
+target_link_libraries(data generator Boost::boost)
 
 add_executable(nbody main.cpp)
-target_link_libraries(nbody generator Boost::boost)
+target_link_libraries(nbody data Boost::boost)

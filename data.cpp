@@ -4,8 +4,8 @@
 
 using namespace boost::qvm;
 
-DataOutput::DataOutput(char* filename) {
-    output_stream.open(filename);
+DataOutput::DataOutput(std::string &filename) {
+    output_stream.open(filename.c_str());
 }
 
 DataOutput::~DataOutput() {
@@ -24,9 +24,9 @@ void write_datapoint(boost::qvm::vec<float, 3> pos) {
 }
 
 
-void add_datapoints(Particles *particles) {
-    for(int i = 0; i < particles->get_count(); i++)
-        write_datapoint(particles->get(i)->get_position());
+void add_datapoints(Particles &particles) {
+    for(int i = 0; i < particles.get_count(); i++)
+        write_datapoint(particles.get(i)->get_position());
 }
 
 void add_octree_bounding_boxes(OctreeNode *parent) {
