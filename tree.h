@@ -27,6 +27,10 @@ public:
   OctreeNode *set_parent();
   OctreeNode *get_parent();
 
+  BoundingBox* get_bounding_box();
+
+  void add_particle(Particle *particle);
+
   void build_children();
 };
 

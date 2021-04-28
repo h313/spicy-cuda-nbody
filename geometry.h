@@ -48,6 +48,7 @@ class BoundingBox {
 private:
   boost::qvm::vec<float, 3> min;
   boost::qvm::vec<float, 3> max;
+  boost::qvm::vec<float, 3> center;
 
 public:
   BoundingBox(boost::qvm::vec<float, 3> min, boost::qvm::vec<float, 3> max);
@@ -57,4 +58,8 @@ public:
 
   boost::qvm::vec<float, 3> get_min();
   boost::qvm::vec<float, 3> get_max();
+
+  void compute_center();
+  boost::qvm::vec<float, 3> get_center();
+
 };
