@@ -8,6 +8,6 @@
 #   DATAPOINT:
 #       X Y Z
 #   BOUNDINGBOX:
-#       X1 Y1 Z1 X2 Y2 Z2
+#       MINX MINY MINZ MAXX MAXY MAXZ
 
 
