@@ -70,6 +70,15 @@ vec<float, 3> BoundingBox::get_min() { return min; }
 
 vec<float, 3> BoundingBox::get_max() { return max; }
 
+void compute_center() {
+  float c_x = 0.5f * (A<0>(p_min) + A<0>(p_max));
+  float c_y = 0.5f * (A<1>(p_min) + A<1>(p_max));
+  float c_z = 0.5f * (A<2>(p_min) + A<2>(p_max));
+  center = vec<float, 3>{{c_x, c_y, c_z}};
+}
+
+boost::qvm::vec<float, 3> get_center() { return center; }
+
 bool BoundingBox::contains(vec<float, 3> item) {
   if (A<0>(item) >= A<0>(min) && A<0>(item) < A<0>(max) &&
       A<1>(item) >= A<1>(min) && A<1>(item) < A<1>(max) &&
