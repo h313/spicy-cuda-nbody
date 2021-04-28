@@ -27,6 +27,8 @@ public:
 
   Particles &operator=(const Particles &p) = default;
 
+  void add_particle(Particle p);
+
   void add_particle(float s_x, float s_y, float s_z);
 
   void add_particle(float s_x, float s_y, float s_z, float v_x, float v_y,

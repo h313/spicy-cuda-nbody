@@ -31,6 +31,10 @@ Particles::Particles(float *s_x, float *s_y, float *s_z, float *v_x, float *v_y,
   }
 }
 
+void Particles::add_particle(Particle p) {
+  particle_list.push_back(p);
+}
+
 void Particles::add_particle(float s_x, float s_y, float s_z) {
   Particle p;
   p.set_position(vec<double, 3>{{s_x, s_y, s_z}});
@@ -58,7 +62,7 @@ void Particles::add_particle(vec<float, 3> loc, vec<float, 3> vel) {
   particle_list.push_back(p);
 }
 
-Particle &Particles::get(size_t index) { return particle_list[index]; }
+Particle &Particles::get(size_t index) { return particle_list.at(index); }
 
 size_t Particles::get_count() { return particle_list.size(); }
 
@@ -77,14 +81,14 @@ vec<float, 3> BoundingBox::get_min() { return min; }
 
 vec<float, 3> BoundingBox::get_max() { return max; }
 
-void compute_center() {
-  float c_x = 0.5f * (A<0>(p_min) + A<0>(p_max));
-  float c_y = 0.5f * (A<1>(p_min) + A<1>(p_max));
-  float c_z = 0.5f * (A<2>(p_min) + A<2>(p_max));
+void BoundingBox::compute_center() {
+  float c_x = 0.5f * (A<0>(min) + A<0>(max));
+  float c_y = 0.5f * (A<1>(min) + A<1>(max));
+  float c_z = 0.5f * (A<2>(min) + A<2>(max));
   center = vec<float, 3>{{c_x, c_y, c_z}};
 }
 
-boost::qvm::vec<float, 3> get_center() { return center; }
+boost::qvm::vec<float, 3> BoundingBox::get_center() { return center; }
 
 bool BoundingBox::contains(vec<float, 3> item) {
   if (A<0>(item) >= A<0>(min) && A<0>(item) < A<0>(max) &&

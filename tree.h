@@ -24,12 +24,12 @@ public:
 
   OctreeNode *get_child(size_t n);
 
-  OctreeNode *set_parent();
+  void set_parent(OctreeNode* p);
   OctreeNode *get_parent();
 
-  BoundingBox* get_bounding_box();
+  BoundingBox &get_bounding_box();
 
-  void add_particle(Particle *particle);
+  void add_particle(Particle particle);
 
   void build_children();
 };
