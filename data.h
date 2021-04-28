@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <boost/qvm/vec.hpp>
-#include <boost/qvm/vec_access.hpp>
 
+#include "generator.h"
 
 class DataOutput {
 private:
