@@ -13,6 +13,8 @@
 #include <thrust/device_vector.h>
 #include "helper_cuda.h"
 
+ using namespace std;
+
 ////////////////////////////////////////////////////////////////////////////////
 // A structure of 2D points (structure of arrays).
 ////////////////////////////////////////////////////////////////////////////////
@@ -529,8 +531,9 @@ bool check_quadtree(const Quadtree_node *nodes, int idx, int num_pts, Points *pt
 {
     const Quadtree_node &node = nodes[idx];
     int num_points = node.num_points();
+    cout << "Octree node " << idx << " in layer " << params.num_nodes_at_this_level << " has " << num_points << " points" << endl;
 
-    if (params.depth == params.max_depth || num_points <= params.min_points_per_node)
+    if (params.depth != params.max_depth && num_points > params.min_points_per_node)
     {
         int num_points_in_children = 0;
 
@@ -538,6 +541,8 @@ bool check_quadtree(const Quadtree_node *nodes, int idx, int num_pts, Points *pt
         num_points_in_children += nodes[params.num_nodes_at_this_level + 4*idx+1].num_points();
         num_points_in_children += nodes[params.num_nodes_at_this_level + 4*idx+2].num_points();
         num_points_in_children += nodes[params.num_nodes_at_this_level + 4*idx+3].num_points();
+
+        cout << "Octree node " << idx << " has " << num_points_in_children << " points in children" << endl;
 
         if (num_points_in_children != node.num_points())
             return false;
@@ -552,13 +557,17 @@ bool check_quadtree(const Quadtree_node *nodes, int idx, int num_pts, Points *pt
 
     for (int it = node.points_begin() ; it < node.points_end() ; ++it)
     {
-        if (it >= num_pts)
+        if (it >= num_pts) {
+            cout << "More points than expected!" << endl;
             return false;
+        }
 
         float2 p = pts->get_point(it);
 
-        if (!bbox.contains(p))
+        if (!bbox.contains(p)){
+            cout << "Point not in bounding box!" << endl;
             return false;
+        }
     }
 
     return true;
