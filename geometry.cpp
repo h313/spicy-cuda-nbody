@@ -1,4 +1,5 @@
 #include "geometry.h"
+
 #include <boost/qvm/vec_access.hpp>
 
 using namespace boost::qvm;

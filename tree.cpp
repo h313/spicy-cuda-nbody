@@ -1,4 +1,5 @@
 #include "tree.h"
+
 #include "pthread.h"
 
 OctreeNode::OctreeNode(Particles p, BoundingBox bbox)
