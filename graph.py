@@ -11,6 +11,11 @@
 #       MINX MINY MINZ MAXX MAXY MAXZ
 
 
+import sys
+if len(sys.argv) < 2:
+    print("Invalid filename")
+
+
 from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 import numpy as np
@@ -21,7 +26,7 @@ ax = plt.axes(projection='3d')
 points = []
 lines = []
 
-file = open('output.txt', 'r')
+file = open(sys.argv[1], 'r')
 for line in file:
     values = line.rstrip().split(' ')
     if values[0] == 'DATAPOINT':
@@ -54,7 +59,7 @@ for line in file:
         lines.append(l)
 
 
-print(lines)
+#print(lines)
 
 #points = np.asarray(points)
 
@@ -71,7 +76,5 @@ for line in lines:
     y = [float(x[1]) for x in line]
     z = [float(x[2]) for x in line]
     ax.plot3D(x, y, z, 'gray') 
-
-
 
 plt.show()
