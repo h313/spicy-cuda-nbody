@@ -11,8 +11,8 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  BoundingBox bb(0, 0, 0, 100, 100, 100);
-  Particles particles = generate_random_particles(atoi(argv[1]), 0, 100);
+  BoundingBox bb(0, 0, 0, 100000, 100000, 100000);
+  Particles particles = generate_random_particles(atoi(argv[1]), 0, 100000);
   OctreeNode *parent = new OctreeNode(particles, bb);
 
   cout << "Completed particle generation!" << endl;
