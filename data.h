@@ -10,8 +10,8 @@ private:
 public:
     DataOutput(std::string &filename);
     ~DataOutput();
-    void write_bounding_box(boost::qvm::vec<float, 3> start, boost::qvm::vec<float, 3> end);
+    void write_bounding_box(BoundingBox *bb);
     void write_datapoint(boost::qvm::vec<float, 3> pos);
     void add_datapoints(Particles &particles);
-    void add_octree_bounding_boxes(OctreeNode *parent);
+    void add_octree_bounding_boxes(OctreeNode &parent);
 };
