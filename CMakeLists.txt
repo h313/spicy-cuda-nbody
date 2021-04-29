@@ -1,9 +1,11 @@
 project(nbody)
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
+set(CMAKE_MODULE_PATH TBB /usr/local/share/cmake-3.20/Modules/)
+
 find_package(Boost REQUIRED)
 find_package(Threads REQUIRED)
-find_package(TBB REQUIRED COMPONENTS tbbmalloc tbbmalloc_proxy)
+#find_package(TBB REQUIRED COMPONENTS tbbmalloc tbbmalloc_proxy)
 find_package(OpenMP)
 
 set(Boost_USE_STATIC_LIBS ON)
