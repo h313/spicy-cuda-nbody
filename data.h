@@ -13,5 +13,5 @@ public:
     void write_bounding_box(BoundingBox *bb);
     void write_datapoint(boost::qvm::vec<float, 3> pos);
     void add_datapoints(Particles &particles);
-    void add_octree_bounding_boxes(OctreeNode &parent);
+    void add_octree_bounding_boxes(OctreeNode *parent);
 };

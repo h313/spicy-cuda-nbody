@@ -29,13 +29,13 @@ void DataOutput::add_datapoints(Particles &particles) {
         write_datapoint(particles.get(i).get_position());
 }
 
-void DataOutput::add_octree_bounding_boxes(OctreeNode &parent) {
+void DataOutput::add_octree_bounding_boxes(OctreeNode *parent) {
     // Write the current bounding box
-    write_bounding_box(&(parent.get_bounding_box()));
+    write_bounding_box(&(parent->get_bounding_box()));
 
     // Recurse down through children
     for(int i = 0; i < 8; i++) {
-        OctreeNode &child = parent.get_child(i);
+        OctreeNode *child = parent->get_child(i);
         if(child->get_particle_count() > 1)
             add_octree_bounding_boxes(child);
     }
