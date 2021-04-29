@@ -16,7 +16,7 @@ void DataOutput::write_bounding_box(BoundingBox *bb) {
     boost::qvm::vec<float, 3> min = bb->get_min();
     boost::qvm::vec<float, 3> max = bb->get_max();
     output_stream << "BOUNDINGBOX " << A<0>(min) << " " << A<1>(min) << " " << A<2>(min) << " "
-        A<0>(max) << " " << A<1>(max) << " " << A<2>(max) << std::endl;
+        << A<0>(max) << " " << A<1>(max) << " " << A<2>(max) << std::endl;
 }
 
 void DataOutput::write_datapoint(boost::qvm::vec<float, 3> pos) {
@@ -35,7 +35,7 @@ void DataOutput::add_octree_bounding_boxes(OctreeNode &parent) {
 
     // Recurse down through children
     for(int i = 0; i < 8; i++) {
-        OctreeNode *child = parent.get_child(i);
+        OctreeNode &child = parent.get_child(i);
         if(child->get_particle_count() > 1)
             add_octree_bounding_boxes(child);
     }
