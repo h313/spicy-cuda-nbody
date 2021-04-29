@@ -15,7 +15,7 @@ import sys
 if len(sys.argv) < 2:
     print("Invalid filename")
 
-
+import random
 from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,6 +25,8 @@ ax = plt.axes(projection='3d')
 
 points = []
 lines = []
+colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple', 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
+
 
 file = open(sys.argv[1], 'r')
 for line in file:
@@ -45,23 +47,31 @@ for line in file:
         j = [(xmax, ymax, zmin), (xmax, ymax, zmax)]
         k = [(xmax, ymin, zmin), (xmax, ymin, zmax)]
         l = [(xmin, ymin, zmin), (xmin, ymin, zmax)]
-        lines.append(a)
-        lines.append(b)
-        lines.append(c)
-        lines.append(d)
-        lines.append(e)
-        lines.append(f)
-        lines.append(g)
-        lines.append(h)
-        lines.append(i)
-        lines.append(j)
-        lines.append(k)
-        lines.append(l)
-
-
-#print(lines)
-
-#points = np.asarray(points)
+        if a not in lines:
+            lines.append(a)
+        if b not in lines:
+            lines.append(b)
+        if c not in lines:
+            lines.append(c)
+        if d not in lines:
+            lines.append(d)
+        if e not in lines:
+            lines.append(e)
+        if f not in lines:
+            lines.append(f)
+        if g not in lines:
+            lines.append(g)
+        if h not in lines:
+            lines.append(h)
+        if i not in lines:
+            lines.append(i)
+        if j not in lines:
+            lines.append(j)
+        if k not in lines:
+            lines.append(k)
+        if l not in lines:
+            lines.append(l)
+        
 
 px = [float(x[0]) for x in points]
 py = [float(x[1]) for x in points]
@@ -71,7 +81,13 @@ pz = [float(x[2]) for x in points]
 ax.scatter3D(px, py, pz, c=pz)
 
 # Draw bounding boxes
+#color = colors[random.randint(0, len(colors)-1)]
+#num_lines = 0
 for line in lines:
+    #num_lines += 1
+    #if num_lines == 12:
+    #    num_lines = 0
+    #    color = colors[random.randint(0, len(colors)-1)]
     x = [float(x[0]) for x in line]
     y = [float(x[1]) for x in line]
     z = [float(x[2]) for x in line]
