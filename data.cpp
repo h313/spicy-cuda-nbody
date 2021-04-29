@@ -35,8 +35,8 @@ void DataOutput::add_octree_bounding_boxes(OctreeNode &parent) {
 
     // Recurse down through children
     for(int i = 0; i < 8; i++) {
-        OctreeNode &child = parent.get_child(i);
-        if(child->get_particle_count() > 1)
-            add_octree_bounding_boxes(child);
+        OctreeNode child = *parent.get_child(i);
+        if(child.get_particle_count() > 1)
+            add_octree_bounding_boxes(&child);
     }
 }
