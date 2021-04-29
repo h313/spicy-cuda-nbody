@@ -6,7 +6,7 @@
 
 class DataOutput {
 private:
-    std::ofstream file_stream;
+    std::ofstream output_stream;
 public:
     DataOutput(std::string &filename);
     ~DataOutput();
