@@ -15,8 +15,9 @@ int main(int argc, char **argv) {
   Particles particles = generate_random_particles(atoi(argv[1]), 0, 100000);
   OctreeNode *parent = new OctreeNode(particles, bb);
 
+  make_tree_serial(parent);
   // make_tree(static_cast<void *>(parent));
-  make_tree_openmp(parent);
+  // make_tree_openmp(parent);
 
   if (argv[2]) {
     std::string filename = "output.txt";

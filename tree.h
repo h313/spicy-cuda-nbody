@@ -34,7 +34,10 @@ public:
   void build_children();
 };
 
-// Recursive function to generate oct tree
+// Recursive function to generate oct tree using pthreads
 void *make_tree(void *node);
+
+// Recursive function to generate oct tree serially
+void make_tree_serial(OcteeNode *root);
 
 void make_tree_openmp(OctreeNode *root);
