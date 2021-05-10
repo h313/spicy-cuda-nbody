@@ -4,7 +4,7 @@
 #include <semaphore.h>
 
 // Create the semaphore to limit the number of threads
-sem_t thread_availible;
+static sem_t thread_availible;
 
 class OctreeNode {
 private:
