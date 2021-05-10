@@ -16,15 +16,16 @@ int main(int argc, char **argv) {
   OctreeNode *parent = new OctreeNode(particles, bb);
 
   // Mode 0 is serial
-  if (argv[3] == 0)
+  int mode = atoi(argv[3]);
+  if (mode == 0)
     make_tree_serial(parent);
 
   // Mode 1 is unbounded parallel
-  else if (argv[3] == 1)
+  else if (mode == 1)
     make_tree_unbounded(static_cast<void *>(parent));
 
   // Mode 2 is bounded parallel
-  else if (argv[3] == 2) {
+  else if (mode == 2) {
     if (argc < 5) {
       cout << "Invalid number of threads" << endl;
       return 1;
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
   }
 
   // Mode 3 is OpenMP
-  else if (argv[3] == 3)
+  else if (mode == 3)
     make_tree_openmp(parent);
 
   // Default - Invalid Arguments
