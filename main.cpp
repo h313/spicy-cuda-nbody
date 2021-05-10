@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
       cout << "Invalid number of threads" << endl;
       return 1;
     }
-    init_semaphore(argv[4]);
+    init_semaphore(atoi(argv[4]));
     make_tree_bounded(static_cast<void *>(parent));
     deinit_semaphore();
   }
