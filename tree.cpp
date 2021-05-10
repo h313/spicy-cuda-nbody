@@ -101,7 +101,7 @@ void OctreeNode::build_children() {
 }
 
 // Recursive function to generate oct tree called using
-void *make_tree(void *node) {
+void *make_tree_unbounded(void *node) {
   pthread_t child_threads[8];
   bool pthread_active[8] = {false};
   // Create the children of the root vector
@@ -114,7 +114,7 @@ void *make_tree(void *node) {
       OctreeNode *child = root->get_child(i);
       // Only spawn a new thread if we have more than one particle in the area
       if (child->get_particle_count() > 1) {
-        pthread_create(&child_threads[i], NULL, make_tree, (void *)child);
+        pthread_create(&child_threads[i], NULL, make_tree_unbounded, (void *)child);
         pthread_active[i] = true;
       }
     }
@@ -125,6 +125,47 @@ void *make_tree(void *node) {
         pthread_join(child_threads[i], NULL);
     }
   }
+}
+
+// Initialize the semaphore
+void init_semaphore(int max_threads) {
+  sem_init(&thread_availible, 0, max_threads);
+}
+
+// Destroy the semaphore
+void deinit_semaphore() {
+  sem_destroy(&thread_availible);
+}
+
+// Recursive function to generate oct tree called using 
+void *make_tree_bounded(void *node) {
+  pthread_t child_threads[8];
+  bool pthread_active[8] = {false};
+  // Create the children of the root vector
+  OctreeNode *root = static_cast<OctreeNode *>(node);
+  if (root->get_particle_cound() > 1) {
+    root->build_children();
+
+    // Now build children for each of that root's children as well
+    for (size_t i = 0; i < 8; i++) {
+      OctreeNode *child = root->get_child(i);
+      // Only spawn a new thread if we have more than one particle in the area
+      if (child->get_particle_count() > 1) {
+        // When this passes fewer than 8 threads are running
+        sem_wait(&thread_availible);
+        pthread_create(&child_threads[i], NULL, make_tree_bounded, (void *)child);
+        pthread_active[i] = true;
+      }
+    }
+
+    // Wait for the children to finish
+    for (int i = 0; i < 8; i++) {
+      if(pthread_active[i])
+        pthread_join(child_threads[i], NULL);
+    }
+  }
+  // Increment the semaphore since this thread is done
+  sem_post(&thread_availible);
 }
 
 // Recursive function to serially generate oct tree called using
