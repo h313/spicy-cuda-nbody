@@ -131,11 +131,11 @@ void *make_tree(void *node) {
 void make_tree_serial(OctreeNode *node) {
   // Create the children of the root vector
   OctreeNode *root = node;
-  if(root->get_particles_count() > 1) {
+  if(root->get_particle_count() > 1) {
     root->build_children();
 
     // Now build children for each of that root's children as well
-    for(size_t i = 0, i < 8; i++) {
+    for(size_t i = 0; i < 8; i++) {
       OctreeNode *child = root->get_child(i);
       // Only recurse down if we have more than one particle in the area
       if(child->get_particle_count() > 1) {
