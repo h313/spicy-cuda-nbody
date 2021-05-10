@@ -143,7 +143,7 @@ void *make_tree_bounded(void *node) {
   bool pthread_active[8] = {false};
   // Create the children of the root vector
   OctreeNode *root = static_cast<OctreeNode *>(node);
-  if (root->get_particle_cound() > 1) {
+  if (root->get_particle_count() > 1) {
     root->build_children();
 
     // Now build children for each of that root's children as well
